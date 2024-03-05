@@ -1,0 +1,15 @@
+Setting code style for java in Intellij
+
+We want to use Google Style Guide for our Java projects.
+You can read document about this code style here
+https://google.github.io/styleguide/javaguide.html
+
+Follow these steps to apply Google Style to Intellij:
+1.Download the intellij-java-google-style.xml file from here
+(https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml).
+or you can use code-style.xml from /doc path.
+2.In Intellij goto the Setting..Code Style and select Java
+3.In the configuration schema window select the gear icon next to the schema
+drop down and click on Import Scheme > IntelliJ IDEA code style XML and then select the
+intellij-java-google-style.xml file and apply it.
+
