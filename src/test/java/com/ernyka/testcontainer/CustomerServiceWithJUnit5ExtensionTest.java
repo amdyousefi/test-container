@@ -3,32 +3,21 @@ package com.ernyka.testcontainer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ernyka.testcontainer.entity.Customer;
+import com.ernyka.testcontainer.service.CustomerService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-class CustomerServiceWithJUnit5ExtensionTest {
-
-  @Container
-  static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-    "postgres:16-alpine"
-  );
+class CustomerServiceWithJUnit5ExtensionTest extends AbstractDatabaseContainer {
 
   CustomerService customerService;
 
   @BeforeEach
   void setUp() {
     customerService =
-    new CustomerService(
-      postgres.getJdbcUrl(),
-      postgres.getUsername(),
-      postgres.getPassword()
-    );
+        new CustomerService(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());
     customerService.deleteAllCustomers();
   }
 
@@ -38,8 +27,8 @@ class CustomerServiceWithJUnit5ExtensionTest {
 
     Optional<Customer> customer = customerService.getCustomer(1L);
     assertTrue(customer.isPresent());
-    assertEquals(1L, customer.get().id());
-    assertEquals("George", customer.get().name());
+    assertEquals(1L, customer.get().getId());
+    assertEquals("George", customer.get().getName());
   }
 
   @Test

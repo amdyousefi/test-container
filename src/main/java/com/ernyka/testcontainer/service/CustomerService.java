@@ -1,5 +1,6 @@
-package com.ernyka.testcontainer;
+package com.ernyka.testcontainer.service;
 
+import com.ernyka.testcontainer.entity.Customer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,11 +25,9 @@ public class CustomerService {
 
   public void createCustomer(Customer customer) {
     try (Connection conn = this.getConnection()) {
-      PreparedStatement pstmt = conn.prepareStatement(
-        "insert into customers(id,name) values(?,?)"
-      );
-      pstmt.setLong(1, customer.id());
-      pstmt.setString(2, customer.name());
+      PreparedStatement pstmt = conn.prepareStatement("insert into customers(id,name) values(?,?)");
+      pstmt.setLong(1, customer.getId());
+      pstmt.setString(2, customer.getName());
       pstmt.execute();
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -39,9 +38,7 @@ public class CustomerService {
     List<Customer> customers = new ArrayList<>();
 
     try (Connection conn = this.getConnection()) {
-      PreparedStatement pstmt = conn.prepareStatement(
-        "select id,name from customers"
-      );
+      PreparedStatement pstmt = conn.prepareStatement("select id,name from customers");
       ResultSet rs = pstmt.executeQuery();
       while (rs.next()) {
         long id = rs.getLong("id");
@@ -56,9 +53,7 @@ public class CustomerService {
 
   public Optional<Customer> getCustomer(Long customerId) {
     try (Connection conn = this.getConnection()) {
-      PreparedStatement pstmt = conn.prepareStatement(
-        "select id,name from customers where id = ?"
-      );
+      PreparedStatement pstmt = conn.prepareStatement("select id,name from customers where id = ?");
       pstmt.setLong(1, customerId);
       ResultSet rs = pstmt.executeQuery();
       if (rs.next()) {
@@ -83,15 +78,15 @@ public class CustomerService {
 
   private void createCustomersTableIfNotExists() {
     try (Connection conn = this.getConnection()) {
-      PreparedStatement pstmt = conn.prepareStatement(
-        """
-        create table if not exists customers (
-            id bigint not null,
-            name varchar not null,
-            primary key (id)
-        )
-        """
-      );
+      PreparedStatement pstmt =
+          conn.prepareStatement(
+              """
+                    create table if not exists customers (
+                        id bigint not null,
+                        name varchar not null,
+                        primary key (id)
+                    )
+                    """);
       pstmt.execute();
     } catch (SQLException e) {
       throw new RuntimeException(e);

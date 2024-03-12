@@ -1,0 +1,16 @@
+server:
+  port: 8095
+  tomcat:
+    accesslog:
+      enabled: true
+
+spring:
+  profiles:
+    active:
+      "@activatedProperties@"
+  main:
+    allow-bean-definition-overriding: true # TODO REVIEW PLEASE
+  application:
+    name: test-container
+  jpa:
+    open-in-view: false

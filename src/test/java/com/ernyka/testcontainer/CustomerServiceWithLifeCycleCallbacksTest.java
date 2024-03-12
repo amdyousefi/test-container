@@ -3,6 +3,8 @@ package com.ernyka.testcontainer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ernyka.testcontainer.entity.Customer;
+import com.ernyka.testcontainer.service.CustomerService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
@@ -13,9 +15,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 class CustomerServiceWithLifeCycleCallbacksTest {
 
-  static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-    "postgres:16-alpine"
-  );
+  static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
   CustomerService customerService;
 
@@ -32,11 +32,7 @@ class CustomerServiceWithLifeCycleCallbacksTest {
   @BeforeEach
   void setUp() {
     customerService =
-    new CustomerService(
-      postgres.getJdbcUrl(),
-      postgres.getUsername(),
-      postgres.getPassword()
-    );
+        new CustomerService(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());
     customerService.deleteAllCustomers();
   }
 
@@ -46,8 +42,8 @@ class CustomerServiceWithLifeCycleCallbacksTest {
 
     Optional<Customer> customer = customerService.getCustomer(1L);
     assertTrue(customer.isPresent());
-    assertEquals(1L, customer.get().id());
-    assertEquals("George", customer.get().name());
+    assertEquals(1L, customer.get().getId());
+    assertEquals("George", customer.get().getName());
   }
 
   @Test
